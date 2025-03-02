@@ -16,7 +16,12 @@ public class Seat {
 
     private String seatNumber;
     private boolean isAvailable;
-    private String seatType;
+
+    @Enumerated(EnumType.STRING)
+    private SeatType seatType;
+
+    @Enumerated(EnumType.STRING)
+    private SeatClass seatClass;
 
     @ManyToOne
     @JoinColumn(name = "flight_id")

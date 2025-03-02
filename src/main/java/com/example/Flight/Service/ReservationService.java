@@ -1,8 +1,6 @@
 package com.example.Flight.Service;
 
-import com.example.Flight.model.Flight;
-import com.example.Flight.model.Reservation;
-import com.example.Flight.model.Seat;
+import com.example.Flight.model.*;
 import com.example.Flight.repository.FlightRepository;
 import com.example.Flight.repository.ReservationRepository;
 import com.example.Flight.repository.SeatRepository;
@@ -19,17 +17,20 @@ public class ReservationService {
     private final FlightRepository flightRepository;
     private final SeatRepository seatRepository;
 
-    public Reservation bookSeats(Long flightId, String passengerName, int numberOfSeats) {
+    public Reservation bookSeats(Long flightId, String passengerName, int numberOfSeats, SeatType preferredType, SeatClass seatClass) {
         Flight flight = flightRepository.findById(flightId)
                 .orElseThrow(() -> new RuntimeException("Flight not found"));
 
         List<Seat> availableSeats = seatRepository.findAll().stream()
-                .filter(seat -> seat.getFlight().getId().equals(flightId) && seat.isAvailable())
+                .filter(seat -> seat.getFlight().getId().equals(flightId)
+                        && seat.isAvailable()
+                        && seat.getSeatType() == preferredType
+                        && seat.getSeatClass() == seatClass)
                 .limit(numberOfSeats)
                 .collect(Collectors.toList());
 
         if (availableSeats.size() < numberOfSeats) {
-            throw new RuntimeException("Not enough available seats");
+            throw new RuntimeException("Not enough available seats in the selected category");
         }
 
         availableSeats.forEach(seat -> seat.setAvailable(false));
