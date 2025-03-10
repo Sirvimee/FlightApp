@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <h2>Vali istekoht</h2>
+  <div class="seat-container" *ngFor="let section of seatmap">
+    <h3>{{ section.class.replace('_', ' ') }}</h3>
+    <div *ngFor="let seatRow of section.seats">
+      <div class="seat-row">
+        <div *ngFor="let seat of seatRow" 
+             class="seat-item" 
+             [ngClass]="getSeatClass(seat)" 
+             (click)="seat && seat.available === true && selectSeat(seat)">
+          {{ seat ? seat.seatNumber : '' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

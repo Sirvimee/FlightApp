@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <h2>Lennuplaan</h2>
+
+  <!-- Filtrid -->
+  <div class="filters mb-3">
+    <input type="text" placeholder="Sihtkoht" [(ngModel)]="filters.destination" class="form-control mb-2">
+    <input type="date" placeholder="Kuupäev" [(ngModel)]="filters.date" class="form-control mb-2">
+    <input type="time" placeholder="Väljumisaeg" [(ngModel)]="filters.departureTime" class="form-control mb-2">
+    <input type="number" placeholder="Hind (€)" [(ngModel)]="filters.price" class="form-control mb-2">
+    <button class="btn btn-primary" (click)="applyFilters()">Rakenda</button>
+  </div>
+  
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Kuupäev</th>
+        <th>Lennufirma</th>
+        <th>Sihtkoht</th>
+        <th>Väljub</th>
+        <th>Saabub</th>
+        <th>Hind (€)</th>
+        <th>Reisijate arv</th>
+        <th>Tegevus</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let flight of filteredFlights">
+        <td>{{ flight.date | date:'dd.MM.yyyy' }}</td>
+        <td>{{ flight.airline }}</td>
+        <td>{{ flight.destination }}</td>
+        <td>{{ flight.departureTime | date:'HH:mm' }}</td>
+        <td>{{ flight.arrivalTime | date:'HH:mm dd.MM.yyyy' }}</td>
+        <td>{{ flight.price }}</td>
+        <td>
+          <select [(ngModel)]="flight.passengerCount">
+            <option *ngFor="let count of [1, 2, 3, 4, 5]" [value]="count">{{ count }}</option>
+          </select>
+        </td>
+        <td>
+          <button class="btn btn-primary" (click)="selectFlight(flight)">Vali</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Kuvame istmete valiku, kui lend on valitud -->
+  <app-seat-selection *ngIf="selectedFlightId" [airline]="selectedFlightId"></app-seat-selection>
+</div>
