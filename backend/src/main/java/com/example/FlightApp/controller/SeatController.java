@@ -16,6 +16,11 @@ import java.util.Optional;
 public class SeatController {
     private final SeatService seatService;
 
+    @GetMapping
+    public List<Seat> getAllSeats() {
+        return seatService.getAllSeats();
+    }
+
     @GetMapping("/{flightId}")
     public List<Seat> getSeatsForFlight(@PathVariable Long flightId) {
         return seatService.getSeatsForAirplane(flightId);

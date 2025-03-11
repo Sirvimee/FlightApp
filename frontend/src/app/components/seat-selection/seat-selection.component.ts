@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { SeatService } from '../../services/seat.service';
 import { ReservationService } from '../../services/reservation.service';
 
@@ -10,15 +10,22 @@ import { ReservationService } from '../../services/reservation.service';
 export class SeatSelectionComponent implements OnInit {
   @Input() airline!: number;
   seats: any[] = [];
-  seatmap: any[] = [];
+  firstClassSeats: any[] = [];
+  businessClassSeats: any[] = [];
+  economyClassSeats: any[] = [];
   passengerName = '';
 
-  constructor(private seatService: SeatService, private reservationService: ReservationService) {}
+  constructor(
+    private seatService: SeatService,
+    private reservationService: ReservationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.seatService.getSeatsForFlight(this.airline).subscribe(data => {
       this.seats = data;
       this.processSeatChart();
+      this.cdr.detectChanges(); // Käivita muutuste tuvastamine pärast andmete laadimist
     });
   }
 
@@ -30,54 +37,37 @@ export class SeatSelectionComponent implements OnInit {
   }
 
   getSeatClass(seat: any): string {
-    return seat.available ? 'available-seat' : 'unavailable-seat';
+    let classes = seat.available ? 'available-seat ' : 'unavailable-seat ';
+    if (seat.extraLegroom) {
+      classes += 'extra-legroom ';
+    }
+    if (seat.exitRow) {
+      classes += 'exit-row ';
+    }
+    return classes.trim();
   }
 
   selectSeat(seat: any): void {
     if (seat.available) {
       seat.available = false;
-      alert(`Seat ${seat.seatNumber} selected`);
+      alert(`Iste ${seat.seatNumber} on broneeritud`);
     } else {
-      seat.available = true;
-      alert(`Seat ${seat.seatNumber} deselected`);
+      alert(`Iste ${seat.seatNumber} pole saadaval`);
     }
   }
 
   private processSeatChart(): void {
-    const classOrder = ['BUSINESS', 'FIRST_CLASS', 'ECONOMY'];
-    this.seats.sort((a, b) => classOrder.indexOf(a.seatClass) - classOrder.indexOf(b.seatClass));
-
-    this.seatmap = []; // Tühjendame seatmap enne uue kaardi loomist
-    let currentRow: any[] = [];
-    let currentClass = '';
-
-    this.seats.forEach((seat, index) => {
-      if (seat.seatClass !== currentClass) {
-        if (currentRow.length > 0) {
-          this.seatmap.push({ class: currentClass, seats: this.formatRow(currentRow) });
-          currentRow = [];
-        }
-        currentClass = seat.seatClass;
-      }
-
-      currentRow.push(seat);
-
-      if (currentRow.length === 4) {
-        this.seatmap.push({ class: currentClass, seats: this.formatRow(currentRow) });
-        currentRow = [];
-      }
-    });
-
-    if (currentRow.length > 0) {
-      this.seatmap.push({ class: currentClass, seats: this.formatRow(currentRow) });
-    }
+    this.firstClassSeats = this.seats.filter(seat => seat.seatClass === 'FIRST_CLASS');
+    this.businessClassSeats = this.seats.filter(seat => seat.seatClass === 'BUSINESS');
+    this.economyClassSeats = this.seats.filter(seat => seat.seatClass === 'ECONOMY');
   }
 
-  private formatRow(row: any[]): any[] {
-    const formattedRow = [];
-    for (let i = 0; i < row.length; i += 2) {
-      formattedRow.push([row[i], row[i + 1] || null]);
+  chunkArray(myArray: any[], chunk_size: number): any[][] {
+    const results = [];
+    const arrayCopy = myArray.slice(); // Loo massiivi koopia
+    while (arrayCopy.length) {
+      results.push(arrayCopy.splice(0, chunk_size));
     }
-    return formattedRow;
+    return results;
   }
 }

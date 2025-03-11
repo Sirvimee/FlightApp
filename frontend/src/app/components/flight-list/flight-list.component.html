@@ -1,14 +1,27 @@
 <div class="container mt-4">
-  <h2>Lennuplaan</h2>
+  <h1>Lennuplaan</h1>
 
   <!-- Filtrid -->
-  <div class="filters mb-3">
-    <input type="text" placeholder="Sihtkoht" [(ngModel)]="filters.destination" class="form-control mb-2">
-    <input type="date" placeholder="Kuupäev" [(ngModel)]="filters.date" class="form-control mb-2">
-    <input type="time" placeholder="Väljumisaeg" [(ngModel)]="filters.departureTime" class="form-control mb-2">
-    <input type="number" placeholder="Hind (€)" [(ngModel)]="filters.price" class="form-control mb-2">
-    <button class="btn btn-primary" (click)="applyFilters()">Rakenda</button>
-  </div>
+   <div class="row">
+      <div class="col-md-3">
+        Sihtkoht<input type="text" placeholder="Linn" [(ngModel)]="filters.destination" class="form-control mb-2">
+      </div>
+      <div class="col-md-3">
+        Väljumispäev<input type="date" placeholder="Kuupäev" [(ngModel)]="filters.date" class="form-control mb-2">
+      </div>
+      <div class="col-md-3">
+        Väljumisaeg<input type="time" placeholder="Väljumisaeg" [(ngModel)]="filters.departureTime" class="form-control mb-2">
+      </div>
+      <div class="col-md-3">
+        Hind<input type="number" placeholder="Hind (€)" [(ngModel)]="filters.price" class="form-control mb-2">
+      </div>
+      <p>
+      <div class="col-12 text-center">
+        <button class="btn btn-primary btn-default" (click)="applyFilters()">Rakenda</button>&nbsp;
+        <button class="btn btn-warning btn-default" (click)="clearFilters()">Tühista filtrid</button>
+      </div>
+   </div>
+   <br>
   
   <table class="table table-striped table-hover">
     <thead>
@@ -44,5 +57,5 @@
   </table>
 
   <!-- Kuvame istmete valiku, kui lend on valitud -->
-  <app-seat-selection *ngIf="selectedFlightId" [airline]="selectedFlightId"></app-seat-selection>
+  <app-seat-selection *ngIf="selectedFlightId" [airline]="1"></app-seat-selection>
 </div>

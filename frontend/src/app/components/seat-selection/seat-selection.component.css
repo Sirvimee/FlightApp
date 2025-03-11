@@ -1,7 +1,5 @@
 .seat-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 20px;
 }
 
 .seat-row {
@@ -21,12 +19,20 @@
   cursor: pointer;
 }
 
-.available-seat {
-  background-color: green;
-  color: white;
+.unavailable-seat {
+  background-color: #fc0404;
+  cursor: not-allowed;
 }
 
-.unavailable-seat {
-  background-color: red;
-  color: white;
+.seat-item.extra-legroom {
+  background-color: #ffeb3b;
+  margin-top: 40px;
+}
+
+.seat-item.exit-row {
+  background-color: #ff5722;
+}
+
+.seat-gap {
+  width: 40px; /* Suurem vahe */
 }

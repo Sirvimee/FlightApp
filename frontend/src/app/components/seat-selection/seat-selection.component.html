@@ -1,15 +1,47 @@
-<div class="container mt-4">
-  <h2>Vali istekoht</h2>
-  <div class="seat-container" *ngFor="let section of seatmap">
-    <h3>{{ section.class.replace('_', ' ') }}</h3>
-    <div *ngFor="let seatRow of section.seats">
+<div class="container mt-4 text-center">
+  <h1>Vali istekoht</h1>
+
+  <!-- FIRST CLASS -->
+  <div *ngIf="firstClassSeats.length > 0">
+    <h3>FIRST CLASS</h3>
+    <div *ngFor="let row of chunkArray(firstClassSeats, 4)">
       <div class="seat-row">
-        <div *ngFor="let seat of seatRow" 
-             class="seat-item" 
-             [ngClass]="getSeatClass(seat)" 
-             (click)="seat && seat.available === true && selectSeat(seat)">
-          {{ seat ? seat.seatNumber : '' }}
-        </div>
+        <ng-container *ngFor="let seat of row; let i = index">
+          <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
+            {{ seat.seatNumber }}
+          </div>
+          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Suurem vahe pärast teist istet -->
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUSINESS CLASS -->
+  <div *ngIf="businessClassSeats.length > 0">
+    <h3>BUSINESS</h3>
+    <div *ngFor="let row of chunkArray(businessClassSeats, 4)">
+      <div class="seat-row">
+        <ng-container *ngFor="let seat of row; let i = index">
+          <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
+            {{ seat.seatNumber }}
+          </div>
+          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Suurem vahe pärast teist istet -->
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECONOMY CLASS -->
+  <div *ngIf="economyClassSeats.length > 0">
+    <h3>ECONOMY</h3>
+    <div *ngFor="let row of chunkArray(economyClassSeats, 6)">
+      <div class="seat-row">
+        <ng-container *ngFor="let seat of row; let i = index">
+          <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
+            {{ seat.seatNumber }}
+          </div>
+          <div *ngIf="i === 2" class="seat-gap"></div> <!-- Suurem vahe pärast kolmandat istet -->
+        </ng-container>
       </div>
     </div>
   </div>

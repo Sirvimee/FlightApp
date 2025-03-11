@@ -34,16 +34,26 @@ export class FlightListComponent implements OnInit {
   }
 
   selectFlight(flight: Flight) {
-    this.selectedFlightId = flight.id;
+    this.selectedFlightId = 1;
   }
 
   applyFilters() {
     this.filteredFlights = this.flights.filter(flight => {
       return (!this.filters.destination || flight.destination.toLowerCase().includes(this.filters.destination.toLowerCase())) &&
              (!this.filters.date || flight.date === this.filters.date) &&
-             (!this.filters.departureTime || this.datePipe.transform(flight.departureTime, 'HH:mm:ss') === this.filters.departureTime) &&
+             (!this.filters.departureTime || this.datePipe.transform(flight.departureTime, 'HH:mm') === this.filters.departureTime) &&
              (!this.filters.price || flight.price <= +this.filters.price);
     });
+  }
+
+  clearFilters() {
+    this.filters = {
+      destination: '',
+      date: '',
+      departureTime: '',
+      price: ''
+    };
+    this.applyFilters();
   }
 
   convertTimeStringToDate(timeString: string): Date {

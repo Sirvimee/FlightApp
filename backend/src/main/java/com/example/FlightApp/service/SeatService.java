@@ -29,4 +29,8 @@ public class SeatService {
                         && seat.getSeatClass() == seatClass)
                 .findFirst();
     }
+
+    public List<Seat> getAllSeats() {
+        return seatRepository.findAll();
+    }
 }

@@ -3,8 +3,8 @@ export interface Flight {
     date: string;
     airline: string;
     destination: string;
-    departureTime: Date; // Stringina, kuna see tuleb backendist stringina
-    arrivalTime: string; // Kuupäeva stringina
+    departureTime: Date; 
+    arrivalTime: string; 
     price: number;
     passengerCount: number;
   }
