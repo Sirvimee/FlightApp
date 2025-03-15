@@ -1,5 +1,7 @@
-<div class="container mt-4 text-center">
-  <h1>Vali istekoht</h1>
+<!-- <div class="row"> -->
+<div class="col-12 text-center seat-selection-container">
+<!-- <div class="container mt-4 text-center"> -->
+  <h2>Vali istekoht</h2>
 
   <!-- FIRST CLASS -->
   <div *ngIf="firstClassSeats.length > 0">
@@ -52,11 +54,13 @@
     </div>
   </div>
 
-  <div class="mt-4">
-    <label for="passengerName">Reisija nimi:</label>
-    <input id="passengerName" type="text" [(ngModel)]="passengerName" class="form-control mb-2" placeholder="Sisesta oma nimi">
+  <div class="col-12">
+    <label for="passengerName" class="bold-label">Reisija nimi:</label>
+    <input id="passengerName" type="text" [(ngModel)]="passengerName" class="form-control mb-2 passenger-name-input" placeholder="Sisesta oma nimi">
   
     <button class="btn btn-primary" (click)="confirmSeat()">Kinnita</button>&nbsp;
     <button class="btn btn-warning" (click)="goBack()">Tagasi</button>
   </div>
+<!-- </div> -->
+<!-- </div> -->
 <div>&nbsp;</div>

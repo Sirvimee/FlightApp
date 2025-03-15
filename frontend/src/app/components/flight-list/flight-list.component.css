@@ -1,0 +1,16 @@
+.table-container {
+    padding-bottom: 50px; 
+}
+
+.table {
+    border: #00000038 1px solid;
+    vertical-align: middle;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+    background-color: #000000 !important; 
+    color: #FFFFFF;
+    font-size: 1.2em;
+    font-weight: normal;
+}
