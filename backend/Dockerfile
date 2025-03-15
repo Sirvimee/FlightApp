@@ -1,0 +1,4 @@
+FROM openjdk:23
+VOLUME /tmp
+COPY target/FlightApp-0.0.1-SNAPSHOT.jar backend.jar
+ENTRYPOINT ["java","-jar","backend.jar"]

@@ -14,28 +14,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ReservationSeatRepository reservationSeatRepository;
-    private final FlightRepository flightRepository;
     private final FlightSeatRepository flightSeatRepository;
-
-//    @Transactional
-//    public Reservation bookSeats(Reservation reservation, List<Long> seatIds) {
-//
-//        Reservation savedReservation = reservationRepository.save(reservation);
-//
-//        List<Seat> seats = seatRepository.findAllById(seatIds);
-//
-//
-//        for (Seat seat : seats) {
-//            seat.setAvailable(false);
-//            ReservationSeat reservationSeat = new ReservationSeat();
-//            reservationSeat.setReservation(savedReservation);
-//            reservationSeat.setSeat(seat);
-//            reservationSeatRepository.save(reservationSeat);
-//        }
-//
-//        seatRepository.saveAll(seats);
-//        return savedReservation;
-//    }
 
     @Transactional
     public Reservation bookSeats(Reservation reservation, List<Long> seatIds) {
@@ -55,5 +34,4 @@ public class ReservationService {
         }
         return savedReservation;
     }
-
 }
