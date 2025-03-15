@@ -1,7 +1,6 @@
 package com.example.FlightApp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Airplane {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,11 +23,12 @@ public class Airplane {
     private String model;
     private int capacity;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "airplane", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "airplane")
     private List<Seat> seats;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "airplane", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "airplane")
     private List<Flight> flights;
+
 }

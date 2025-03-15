@@ -1,12 +1,13 @@
 package com.example.FlightApp.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,10 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Seat {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column(name = "seat_number")
     private String seatNumber;
@@ -39,13 +40,11 @@ public class Seat {
     @Column(name = "is_available")
     private boolean isAvailable;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "airplane_id")
     private Airplane airplane;
 
-    @JsonManagedReference
-    @ManyToOne
-    @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
+    @JsonIgnore
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
+    private List<ReservationSeat> reservationsSeats;
 }

@@ -1,6 +1,6 @@
 package com.example.FlightApp.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,9 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Flight {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private LocalDate date;
     private String airline;
     private String destination;
@@ -30,14 +32,14 @@ public class Flight {
 
     @Column(name = "arrival_time")
     private LocalDateTime arrivalTime;
+
     private double price;
 
-    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "airplane_id")
     private Airplane airplane;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(mappedBy = "flight")
     private List<Reservation> reservations;
 }

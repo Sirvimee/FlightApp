@@ -21,15 +21,15 @@ public class SeatController {
         return seatService.getAllSeats();
     }
 
-    @GetMapping("/{flightId}")
-    public List<Seat> getSeatsForFlight(@PathVariable Long flightId) {
-        return seatService.getSeatsForAirplane(flightId);
+    @GetMapping("/{airplaneId}")
+    public List<Seat> getSeatsForFlight(@PathVariable Long airplaneId) {
+        return seatService.getSeatsForAirplane(airplaneId);
     }
 
     @GetMapping("/find")
-    public Optional<Seat> findSeat(@RequestParam Long flightId,
+    public Optional<Seat> findSeat(@RequestParam Long airplaneId,
                                    @RequestParam SeatType preferredType,
                                    @RequestParam SeatClass seatClass) {
-        return seatService.findBestSeat(flightId, preferredType, seatClass);
+        return seatService.findBestSeat(airplaneId, preferredType, seatClass);
     }
 }

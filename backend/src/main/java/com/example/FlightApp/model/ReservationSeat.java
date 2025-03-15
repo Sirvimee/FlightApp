@@ -7,27 +7,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reservation {
+public class ReservationSeat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "passenger_name")
-    private String passengerName;
-
     @ManyToOne
-    @JoinColumn(name = "flight_id")
-    private Flight flight;
+    @JoinColumn(name = "reservation_id", nullable = false)
+    private Reservation reservation;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
-    private List<ReservationSeat> reservationSeats;
+    @ManyToOne
+    @JoinColumn(name = "seat_id", nullable = false, unique = true)
+    private Seat seat;
 }

@@ -15,15 +15,15 @@ import java.util.Optional;
 public class SeatService {
     private final SeatRepository seatRepository;
 
-    public List<Seat> getSeatsForAirplane(Long flightId) {
+    public List<Seat> getSeatsForAirplane(Long airplaneId) {
         return seatRepository.findAll().stream()
-                .filter(seat -> seat.getAirplane().getId().equals(flightId))
+                .filter(seat -> seat.getAirplane().getId().equals(airplaneId))
                 .toList();
     }
 
-    public Optional<Seat> findBestSeat(Long flightId, SeatType preferredType, SeatClass seatClass) {
+    public Optional<Seat> findBestSeat(Long airplaneId, SeatType preferredType, SeatClass seatClass) {
         return seatRepository.findAll().stream()
-                .filter(seat -> seat.getAirplane().getId().equals(flightId)
+                .filter(seat -> seat.getAirplane().getId().equals(airplaneId)
                         && seat.isAvailable()
                         && seat.getSeatType() == preferredType
                         && seat.getSeatClass() == seatClass)
