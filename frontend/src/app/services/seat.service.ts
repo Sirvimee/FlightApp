@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { Seat } from '../model/seat';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class SeatService {
 
   constructor(private http: HttpClient) {}
 
-  getSeatsForFlight(flightId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${flightId}`);
+  getSeatsForFlight(airplaneId: number): Observable<Seat[]> {
+    return this.http.get<Seat[]>(`${this.apiUrl}/${airplaneId}`);
   }
 }

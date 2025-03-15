@@ -4,9 +4,10 @@ import { FlightListComponent } from './components/flight-list/flight-list.compon
 import { SeatSelectionComponent } from './components/seat-selection/seat-selection.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/flights', pathMatch: 'full' }, // Suunab vaikimisi lennuplaanile
+  { path: '', redirectTo: '/flights', pathMatch: 'full' }, 
   { path: 'flights', component: FlightListComponent },
-  { path: 'seats/:flightId', component: SeatSelectionComponent }
+  { path: 'seats/:flightId', component: SeatSelectionComponent },
+  { path: 'flight-list', component: FlightListComponent }
 ];
 
 @NgModule({

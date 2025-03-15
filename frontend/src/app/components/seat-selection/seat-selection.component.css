@@ -25,14 +25,19 @@
 }
 
 .seat-item.extra-legroom {
-  background-color: #ffeb3b;
   margin-top: 40px;
 }
 
 .seat-item.exit-row {
-  background-color: #ff5722;
+  border: 2px solid #31ac00;
 }
 
 .seat-gap {
-  width: 40px; /* Suurem vahe */
+  width: 40px; 
+}
+
+.selected-seat {
+  background-color: #31ac00 !important;
+  color: #fff;
+  font-weight: bold;
 }

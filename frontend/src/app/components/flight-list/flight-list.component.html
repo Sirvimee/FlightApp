@@ -41,21 +41,26 @@
         <td>{{ flight.date | date:'dd.MM.yyyy' }}</td>
         <td>{{ flight.airline }}</td>
         <td>{{ flight.destination }}</td>
-        <td>{{ flight.departureTime | date:'HH:mm' }}</td>
+        <td>{{ flight.departureTime.substring(0, 5) }}</td>
         <td>{{ flight.arrivalTime | date:'HH:mm dd.MM.yyyy' }}</td>
         <td>{{ flight.price }}</td>
         <td>
-          <select [(ngModel)]="flight.passengerCount">
+          <select [(ngModel)]="selectedPassengerCount">
             <option *ngFor="let count of [1, 2, 3, 4, 5]" [value]="count">{{ count }}</option>
           </select>
         </td>
         <td>
-          <button class="btn btn-primary" (click)="selectFlight(flight)">Vali</button>
+          <button class="btn btn-primary" [disabled]="!selectedPassengerCount" (click)="selectFlight(flight)">Vali</button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <!-- Kuvame istmete valiku, kui lend on valitud -->
-  <app-seat-selection *ngIf="selectedFlightId" [airline]="1"></app-seat-selection>
+  <!-- Display the seat selection when the flight is selected -->
+  <app-seat-selection 
+  *ngIf="selectedFlight && selectedPassengerCount > 0" 
+    [flight]="selectedFlight"
+    [passengerCount]="selectedPassengerCount"
+    (back)="clearFlightSelection()">
+  </app-seat-selection>
 </div>

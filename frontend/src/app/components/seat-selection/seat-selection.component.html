@@ -10,7 +10,7 @@
           <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
             {{ seat.seatNumber }}
           </div>
-          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Suurem vahe pärast teist istet -->
+          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Bigger gap -->
         </ng-container>
       </div>
     </div>
@@ -25,7 +25,7 @@
           <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
             {{ seat.seatNumber }}
           </div>
-          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Suurem vahe pärast teist istet -->
+          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Bigger gap -->
         </ng-container>
       </div>
     </div>
@@ -37,12 +37,26 @@
     <div *ngFor="let row of chunkArray(economyClassSeats, 6)">
       <div class="seat-row">
         <ng-container *ngFor="let seat of row; let i = index">
-          <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
+          <div class="seat-item" 
+            [ngClass]="getSeatClass(seat)" 
+            (click)="selectSeat(seat)" 
+            [attr.title]="getSeatClass(seat).includes('extra-legroom') ? 
+            'Suurem jalgade ruum' : getSeatClass(seat).includes('exit-row') ? 
+            'Väljapääs' : ''"
+            >
             {{ seat.seatNumber }}
           </div>
-          <div *ngIf="i === 2" class="seat-gap"></div> <!-- Suurem vahe pärast kolmandat istet -->
+          <div *ngIf="i === 2" class="seat-gap"></div> <!-- Bigger gap -->
         </ng-container>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="mt-4">
+    <label for="passengerName">Reisija nimi:</label>
+    <input id="passengerName" type="text" [(ngModel)]="passengerName" class="form-control mb-2" placeholder="Sisesta oma nimi">
+  
+    <button class="btn btn-primary" (click)="confirmSeat()">Kinnita</button>&nbsp;
+    <button class="btn btn-warning" (click)="goBack()">Tagasi</button>
+  </div>
+<div>&nbsp;</div>

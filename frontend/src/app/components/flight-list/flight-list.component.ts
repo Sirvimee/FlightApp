@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FlightService } from '../../services/flight.service';
-import { DatePipe } from '@angular/common';
 import { Flight } from '../../model/flight';
 
 @Component({
   selector: 'app-flight-list',
   templateUrl: './flight-list.component.html',
   styleUrls: ['./flight-list.component.css'],
-  providers: [DatePipe]
 })
 export class FlightListComponent implements OnInit {
   flights: Flight[] = [];
   filteredFlights: Flight[] = [];
-  selectedFlightId: number | null = null;
+  selectedFlightId: number | null = 0;
+  selectedFlight!: Flight;
+  selectedPassengerCount: number = 0;
 
   filters = {
     destination: '',
@@ -21,28 +21,47 @@ export class FlightListComponent implements OnInit {
     price: ''
   };
 
-  constructor(private flightService: FlightService, private datePipe: DatePipe) {}
+  constructor(private flightService: FlightService) {}
 
   ngOnInit(): void {
-    this.flightService.getFlights().subscribe((data: Flight[]) => {
-      this.flights = data.map(flight => {
-        flight.departureTime = this.convertTimeStringToDate(flight.departureTime as unknown as string);
-        return flight;
-      });
-      this.filteredFlights = this.flights; // Uuenda filteredFlights pärast andmete laadimist
+    this.flightService.getFlights().subscribe({
+      next: (data) => {
+        this.flights = data;
+        this.filteredFlights = this.flights;  
+      },
+      error: (err) => {
+        console.error('Viga lendude laadimisel:', err);
+      },
     });
   }
 
   selectFlight(flight: Flight) {
-    this.selectedFlightId = 1;
+    this.selectedFlight = flight;
+    this.filteredFlights = this.filteredFlights.filter(f => f.id === flight.id);
+    this.selectedPassengerCount = this.selectedPassengerCount;
+  }
+
+  clearFlightSelection() {
+    this.selectedFlightId = null; 
+    this.selectedPassengerCount = 0;
+    this.clearFilters(); 
   }
 
   applyFilters() {
-    this.filteredFlights = this.flights.filter(flight => {
-      return (!this.filters.destination || flight.destination.toLowerCase().includes(this.filters.destination.toLowerCase())) &&
-             (!this.filters.date || flight.date === this.filters.date) &&
-             (!this.filters.departureTime || this.datePipe.transform(flight.departureTime, 'HH:mm') === this.filters.departureTime) &&
-             (!this.filters.price || flight.price <= +this.filters.price);
+    this.filteredFlights = this.filteredFlights.filter(flight => {
+      return (
+        (!this.filters.destination || 
+          flight.destination.toLowerCase().includes(this.filters.destination.toLowerCase())) &&
+          
+        (!this.filters.date || 
+          flight.date === this.filters.date) &&
+          
+        (!this.filters.departureTime || 
+          flight.departureTime === this.filters.departureTime) && 
+          
+        (!this.filters.price || 
+          flight.price <= +this.filters.price)
+      );
     });
   }
 
@@ -53,13 +72,7 @@ export class FlightListComponent implements OnInit {
       departureTime: '',
       price: ''
     };
-    this.applyFilters();
+    this.filteredFlights = this.flights;
   }
 
-  convertTimeStringToDate(timeString: string): Date {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
-    const date = new Date();
-    date.setHours(hours, minutes, seconds, 0);
-    return date;
-  }
 }
