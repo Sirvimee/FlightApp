@@ -13,7 +13,7 @@ export class SeatService {
 
   constructor(private http: HttpClient) {}
 
-  getSeatsForFlight(airplaneId: number): Observable<Seat[]> {
-    return this.http.get<Seat[]>(`${this.apiUrl}/seats/${airplaneId}`);
+  getSeatsForFlight(flightId: number): Observable<Seat[]> {
+    return this.http.get<Seat[]>(`${this.apiUrl}/seats/flight/${flightId}`);
   }
 }

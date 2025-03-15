@@ -1,9 +1,7 @@
 package com.example.FlightApp.service;
 
 import com.example.FlightApp.model.*;
-import com.example.FlightApp.repository.ReservationRepository;
-import com.example.FlightApp.repository.ReservationSeatRepository;
-import com.example.FlightApp.repository.SeatRepository;
+import com.example.FlightApp.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,26 +13,46 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final SeatRepository seatRepository;
     private final ReservationSeatRepository reservationSeatRepository;
+    private final FlightRepository flightRepository;
+    private final FlightSeatRepository flightSeatRepository;
+
+//    @Transactional
+//    public Reservation bookSeats(Reservation reservation, List<Long> seatIds) {
+//
+//        Reservation savedReservation = reservationRepository.save(reservation);
+//
+//        List<Seat> seats = seatRepository.findAllById(seatIds);
+//
+//
+//        for (Seat seat : seats) {
+//            seat.setAvailable(false);
+//            ReservationSeat reservationSeat = new ReservationSeat();
+//            reservationSeat.setReservation(savedReservation);
+//            reservationSeat.setSeat(seat);
+//            reservationSeatRepository.save(reservationSeat);
+//        }
+//
+//        seatRepository.saveAll(seats);
+//        return savedReservation;
+//    }
 
     @Transactional
     public Reservation bookSeats(Reservation reservation, List<Long> seatIds) {
 
         Reservation savedReservation = reservationRepository.save(reservation);
+        Flight flight = reservation.getFlight();
+        List<FlightSeat> flightSeats = flightSeatRepository.findAllById(seatIds);
 
-        List<Seat> seats = seatRepository.findAllById(seatIds);
-
-
-        for (Seat seat : seats) {
+        for (FlightSeat seat : flightSeats) {
             seat.setAvailable(false);
+            seat.setFlight(flight);
             ReservationSeat reservationSeat = new ReservationSeat();
             reservationSeat.setReservation(savedReservation);
-            reservationSeat.setSeat(seat);
+            reservationSeat.setFlightSeat(seat);
+            reservationSeat.setFlight(flight);
             reservationSeatRepository.save(reservationSeat);
         }
-
-        seatRepository.saveAll(seats);
         return savedReservation;
     }
 

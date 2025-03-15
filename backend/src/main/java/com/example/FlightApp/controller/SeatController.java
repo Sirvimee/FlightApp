@@ -1,9 +1,7 @@
 package com.example.FlightApp.controller;
 
+import com.example.FlightApp.model.*;
 import com.example.FlightApp.service.SeatService;
-import com.example.FlightApp.model.Seat;
-import com.example.FlightApp.model.SeatClass;
-import com.example.FlightApp.model.SeatType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +19,19 @@ public class SeatController {
         return seatService.getAllSeats();
     }
 
-    @GetMapping("/{airplaneId}")
-    public List<Seat> getSeatsForFlight(@PathVariable Long airplaneId) {
-        return seatService.getSeatsForAirplane(airplaneId);
+    @GetMapping("/{id}")
+    public Optional<Seat> getSeatById(@PathVariable Long id) {
+        return Optional.ofNullable(seatService.getSeatById(id));
     }
 
-    @GetMapping("/find")
-    public Optional<Seat> findSeat(@RequestParam Long airplaneId,
-                                   @RequestParam SeatType preferredType,
-                                   @RequestParam SeatClass seatClass) {
-        return seatService.findBestSeat(airplaneId, preferredType, seatClass);
+    @GetMapping("/flight/{flightId}")
+    public List<FlightSeat> getSeatsForFlight(@PathVariable Long flightId) {
+        return seatService.getSeatsForFlight(flightId);
     }
+
+    @GetMapping("/airplane/{airplaneId}")
+    public List<AirplaneSeat> getSeatsForAirplane(@PathVariable Long airplaneId) {
+       return seatService.getSeatsForAirplane(airplaneId);
+    }
+
 }

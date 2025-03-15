@@ -8,7 +8,4 @@ export interface Seat {
   seatClass: string;
   extraLegroom: boolean;
   exitRow: boolean;
-  isAvailable: boolean;
-  airplane: Airplane;
-  reservations: ReservationSeats[];
 }

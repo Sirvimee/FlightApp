@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { SeatService } from '../../services/seat.service';
 import { ReservationService } from '../../services/reservation.service';
 import { Output, EventEmitter } from '@angular/core';
@@ -33,13 +32,17 @@ export class SeatSelectionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.seatService.getSeatsForFlight(this.flight.airplane.id).subscribe(data => {
-      this.seats = data;
+    this.seatService.getSeatsForFlight(Number(this.flight.id)).subscribe(data => {
+      this.seats = data.map((s: any) => ({
+        ...s.seat,  
+        available: s.available
+      }));
+  
       this.processSeatChart();
       
       setTimeout(() => {
-      this.selectInitialSeats();
-      this.cdr.detectChanges();
+        this.selectInitialSeats();
+        this.cdr.detectChanges();
       }, 100);
     }, error => {
       console.error("Viga istmete laadimisel:", error);
@@ -123,9 +126,11 @@ export class SeatSelectionComponent implements OnInit {
 
     const reservation: Reservation = {
       passengerName: this.passengerName,
-      flight: this.flight,
-      seats: []
+      flight: this.flight
     };
+
+    console.log(reservation);
+    console.log(this.selectedSeats);
   
     this.reservationService.bookSeats(reservation, this.selectedSeats).subscribe({
       next: () => {
@@ -136,6 +141,7 @@ export class SeatSelectionComponent implements OnInit {
         console.error('Broneering ebaõnnestus:', err);
         alert('Broneerimisel tekkis viga, proovige uuesti.');
       }
+    
     });
   }
    

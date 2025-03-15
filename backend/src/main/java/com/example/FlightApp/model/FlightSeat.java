@@ -14,20 +14,23 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Airplane {
+public class FlightSeat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String model;
-    private int capacity;
+    private boolean available;
+
+    @ManyToOne
+    @JoinColumn(name = "flight_id")
+    private Flight flight;
+
+    @ManyToOne
+    @JoinColumn(name = "seat_id")
+    private Seat seat;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "airplane")
-    private List<AirplaneSeat> airplaneSeats;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "airplane")
-    private List<Flight> flights;
+    @OneToMany(mappedBy = "flightSeat", cascade = CascadeType.ALL)
+    private List<ReservationSeat> reservationSeat;
 }

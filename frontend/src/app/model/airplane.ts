@@ -5,6 +5,4 @@ export interface Airplane {
     id: number;
     model: string;
     capacity: number;
-    seats: Seat[];
-    flights: Flight[];
 }

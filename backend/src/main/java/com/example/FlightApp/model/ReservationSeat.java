@@ -22,8 +22,11 @@ public class ReservationSeat {
     @JoinColumn(name = "reservation_id", nullable = false)
     private Reservation reservation;
 
-    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "seat_id", nullable = false, unique = true)
-    private Seat seat;
+    @JoinColumn(name = "flight_seat_id", nullable = false)
+    private FlightSeat flightSeat;
+
+    @ManyToOne
+    @JoinColumn(name = "flight_id", nullable = false)
+    private Flight flight;
 }

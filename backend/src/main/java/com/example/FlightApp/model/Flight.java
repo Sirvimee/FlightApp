@@ -41,5 +41,13 @@ public class Flight {
 
     @JsonIgnore
     @OneToMany(mappedBy = "flight")
+    private List<FlightSeat> flightSeats;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "flight")
     private List<Reservation> reservations;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "flight")
+    private List<ReservationSeat> reservationSeats;
 }

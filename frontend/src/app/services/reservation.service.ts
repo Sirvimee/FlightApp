@@ -10,8 +10,6 @@ import { environment } from '../environment/environment';
 
 export class ReservationService {
 
-  // private apiUrl = 'http://localhost:8080/reservations';
-
   private readonly apiUrl = environment.apiUrl;
 
   private headers = new HttpHeaders().set('Content-Type', 'application/json');

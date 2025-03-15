@@ -17,10 +17,6 @@ public class FlightService {
         return flightRepository.findAll();
     }
 
-    public List<Flight> getFlightsByDestination(String destination) {
-        return flightRepository.findByDestination(destination);
-    }
-
     public Flight getFlightById(Long id) {
         return flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
     }

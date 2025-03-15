@@ -37,14 +37,11 @@ public class Seat {
     @Column(name = "exit_row")
     private boolean exitRow;
 
-    @Column(name = "is_available")
-    private boolean isAvailable;
-
-    @ManyToOne
-    @JoinColumn(name = "airplane_id")
-    private Airplane airplane;
+    @JsonIgnore
+    @OneToMany(mappedBy = "seat")
+    private List<AirplaneSeat> airplaneSeats;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
-    private List<ReservationSeat> reservationsSeats;
+    @OneToMany(mappedBy = "seat")
+    private List<FlightSeat> flightSeats;
 }

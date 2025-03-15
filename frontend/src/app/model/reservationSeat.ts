@@ -1,8 +1,8 @@
 import { Reservation } from "./reservation";
-import { Seat } from "./seat";
+import { FlightSeat } from "./flightSeat";
 
 export interface ReservationSeats {
   id: number;
   reservations: Reservation;
-  seat: Seat;
+  flight: FlightSeat;
 }
