@@ -1,5 +1,8 @@
 package com.example.FlightApp.service;
 
+import com.example.FlightApp.model.RegisterRequest;
+import com.example.FlightApp.model.User;
+import com.example.FlightApp.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -19,9 +23,11 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl  implements AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
 
     @Value("${jwt.secret}")
@@ -53,6 +59,22 @@ public class AuthenticationServiceImpl  implements AuthenticationService {
     public UserDetails validateToken(String token) {
         String username = extractUsername(token);
         return userDetailsService.loadUserByUsername(username);
+    }
+
+    @Override
+    public User register(RegisterRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new IllegalArgumentException("Email already registered");
+        }
+
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+
+        return userRepository.save(user);
     }
 
     private String extractUsername(String token) {
