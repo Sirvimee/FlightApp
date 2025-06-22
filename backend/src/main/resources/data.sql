@@ -1,5 +1,3 @@
--- AI genereeritud SQL skript
-
 -- Insert Airplanes
 INSERT INTO Airplane (model, capacity) VALUES
     ('Boeing 737', 200),
