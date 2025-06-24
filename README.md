@@ -16,8 +16,8 @@
 5. Frontend jookseb aadressil `http://localhost:4200`
 
 ### Rakenduse käivitamine Dockeris
-1. Klooni projekt enda arvutisse
-2. Olles projekti juurkaustas, käivita käsud `docker load -i myapp.tar` ja `docker-compose up`
+1. Käivita terminalis käsklus: docker run -d -p 8080:8080 meeli54/backend
+2. Käivita terminalis käsklus: docker run -d -p 80:80 meeli54/frontend
 3. Rakendus jookseb aadressil `http://localhost`
 
 ## Arhitektuuri ülevaade
