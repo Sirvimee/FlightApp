@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/flights/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/seats/**").permitAll()
+                .requestMatchers("/v3/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
         )
         .csrf(AbstractHttpConfigurer::disable)
