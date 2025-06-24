@@ -15,41 +15,22 @@
 4. Backendiga koos töötamiseks peab server jooksma pordil nr 4200.
 5. Frontend jookseb aadressil `http://localhost:4200`
 
-### Rakenduse käivitamine Dockeris
-1. Käivita terminalis käsklus: docker run -d -p 8080:8080 meeli54/backend
-2. Käivita terminalis käsklus: docker run -d -p 80:80 meeli54/frontend
-3. Rakendus jookseb aadressil `http://localhost`
-
 ## Arhitektuuri ülevaade
 Rakendus on jagatud kaheks osaks: frontend ja backend. 
-Frontend on kirjutatud Angularis (15.2.11), backend Spring Bootis (java 23). 
-Frontend ja backend suhtlevad omavahel REST API kaudu. Andmebaasina kasutatakse H2 andmebaasi.
-Tabelid ja näidisandmed luuakse automaatselt, kui backend käivitatakse.
+Frontend on kirjutatud Angularis (TypeScript), backend Spring Bootis. 
+Frontend ja backend suhtlevad omavahel REST API kaudu. Andmebaasina kasutatakse Postgre andmebaasi.
 Disainis on kasutatud Bootstrapi.
 
-Peale rakenduse käivitamist ja veebilehe avamist kuvatakse esmalt lennuplaan, mis tuleb andmebaasist.
-Lennuplaani kuvamist saab filtreerida lennu väljumise kuupäeva järgi, lennu sihtkoha järgi ja lennu väljumise kellaaja järgi ning hinna järgi.
-Lendu saab valida alles siis, kui on valitud reisija arv. Peale reisijate arvu valimist muutub nupp "Vali" aktiivseks.
-Kui klient, valinud lennu ja reisijate arvu, avaneb lehe allosas selle lennu istekohad.
+Peale rakenduse käivitamist ja veebilehe avamist kuvatakse esmalt lennuplaan, mis tuleb andmebaasist. Andmebaasi tulevad lennud läbi SerpiApi.
+Lennuplaani kuvamist saab filtreerida lennu väljumise kuupäeva järgi, lennu sihtkoha järgi ja lennu hinna järgi.
+Kui klient on valinud lennu ja märkinud reisijate arvu, avaneb lehe allosas selle lennu istekohad.
 Istekohad on kolmes kategoorias: esimene klass, äriklass ja turistiklass. Omakorda on iga kategooria jagatud kaheks: akna- ja vahekohad.
-Veel on rohelise raamiga märgitud kohad, mis asuvad väljapääsu juures ja osadel kohtadel on suurem jalaruum.
+Veel on rohelise raamiga märgitud kohad, mis asuvad varuväljapääsu juures ja osadel kohtadel on suurem jalaruum.
 Istekohad on erinevate värvidega: punane - hõivatud koht, valge - vaba koht, roheline - valitud koht (algselt programmi poolt soovitatud koht).
-Kohti saab kinnitada alles siis, kui on täidetud lahter "Reisija nimi". Peale reisija nime sisestamist saab istekohad kinnitada.
-Peale istmete kinnitamist salvestub broneering andmebaasi.
+Kohti saab kinnitada alles siis, kui kasutaja on sisse loginud. Peale istmete kinnitamist salvestub broneering andmebaasi.
 
-## Probleemide lahendamine
-Kõige rohkem nägin vaeva frontendiga, kuna Angular on minu jaoks uus tehnoloogia. 
-Ma ei saanud tükk aega aru, kuidas kuupäeva Javast Angulari ja vastupidi saata. Palusin abi AI-lt aga sealt tuli ainult lahendusi, mis mul ei toiminud.
-Tegin pikema puhkuse ja alustasin uuesti puhanud peaga ja sain lõpuks aru, kuidas seda teha.
-Teine suurem probleem oli kui panin rakenduse Dockerisse. Dockeris ei saanud frontend backendist andmeid kätte, tänu CORS probleemile, 
-pidin CORS-i faili backendis muutma aga mul läks aega, et aru saada, kuidas seda teha.
-Alguses tegin kiirelt backendi valmis ja kui hakkasin frontendi tegema, siis sain aru, et pean tegema andmebaasi tabeleid juurde ja muutma olemasolevaid,
-sest alguses olin teinud nii, et kui istmed said ühel lennul broneeritud, siis olid need istmed igal lennul broneeritud.
-
-## Aja planeerimine
-Backendile kulutasin umbes 2-3 tundi, frontendile umbes 20 tundi.
-
-## Viited
-Ai-d kasutasin päris alguses, lasin tal endale tööülesande lahti seletada ja panna paika tegevusjärjekord.
-Backendis kasutasin AI abi SQL-i kirjutamisel, et lihtsalt aega kokku hoida. Frontendis kasutasin AI abi päris palju 
-aga kuna tema poolt tehtud kood ei tahtnud töötada, siis pidin ise lahendusi välja mõtlema.
+## Projekti eesmärk
+Projekti tegin iseseisvalt, et rakendada koolis õpitut. 
+Alguses tegin rakenduse nimega "FlightsSerpApi" (https://github.com/Sirvimee/FlightsSerpApi.git), mis käivitub iga päev kell 00.01 ja toob läbi SerpApi värsked lennud andmebaasi ja kustutab möödunud kuupäevadega lennud andmebaasist. Selles rakenduses sain teha läbi sammud kuidas integreerida rakendusse kolmandate osapoolte API-t ja ajastada toiminguid.
+Järgmisena tegin backend rakenduse (kaustas 'backend'), mis teeb päringuid andmebaasi ja suhtleb frontendiga. Backendis on kasutatud kasutaja lisamiseks ja sisselogimiseks Spring Security´t. Nii sain praktiseerida Spring Security integreerimist.
+Frontendiks valisin Angulari kuna mulle meeldib see framework, sarnanedes oma olekuga OOP-ile.
