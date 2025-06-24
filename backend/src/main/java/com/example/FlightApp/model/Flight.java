@@ -40,14 +40,15 @@ public class Flight {
     private Airplane airplane;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<FlightSeat> flightSeats;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "flight")
+    @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL)
     private List<ReservationSeat> reservationSeats;
+
 }

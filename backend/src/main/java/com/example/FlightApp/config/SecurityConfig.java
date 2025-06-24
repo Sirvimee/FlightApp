@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 public class SecurityConfig {
 
@@ -34,11 +36,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/flights/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/seats/**").permitAll()
+        http
+                .cors(withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/flights/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/seats/**").permitAll()
                 .anyRequest().authenticated()
         )
         .csrf(AbstractHttpConfigurer::disable)

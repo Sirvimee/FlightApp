@@ -3,6 +3,7 @@ package com.example.FlightApp.service;
 import com.example.FlightApp.model.RegisterRequest;
 import com.example.FlightApp.model.User;
 import com.example.FlightApp.repository.UserRepository;
+import com.example.FlightApp.security.AppUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +77,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setLastName(request.getLastName());
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public String getUserIdByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return user.getId().toString();
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     private String extractUsername(String token) {

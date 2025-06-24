@@ -38,10 +38,10 @@ public class Seat {
     private boolean exitRow;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "seat")
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
     private List<AirplaneSeat> airplaneSeats;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "seat")
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL)
     private List<FlightSeat> flightSeats;
 }

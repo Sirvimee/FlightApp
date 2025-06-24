@@ -21,13 +21,13 @@ public class Airplane {
     private Long id;
 
     private String model;
-    private int capacity;
+    private int capasity;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "airplane")
+    @OneToMany(mappedBy = "airplane", cascade = CascadeType.ALL)
     private List<AirplaneSeat> airplaneSeats;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "airplane")
+    @OneToMany(mappedBy = "airplane", cascade = CascadeType.ALL)
     private List<Flight> flights;
 }

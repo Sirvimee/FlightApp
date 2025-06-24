@@ -10,6 +10,7 @@ public interface AuthenticationService {
     UserDetails authenticate(String email, String password);
     String generateToken(UserDetails userDetails);
     UserDetails validateToken(String token);
-
     User register(RegisterRequest request);
+    String getUserIdByEmail(String email);
+    User getUserByEmail(String email);
 }

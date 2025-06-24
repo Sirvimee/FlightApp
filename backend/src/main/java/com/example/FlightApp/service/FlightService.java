@@ -4,6 +4,7 @@ import com.example.FlightApp.model.Flight;
 import com.example.FlightApp.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
