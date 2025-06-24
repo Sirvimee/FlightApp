@@ -1,1 +1,21 @@
+<header class="p-3" style="background-color: rgba(0, 174, 255, 0.438);">
+  <div class="container-fluid">
+    <nav class="navbar">
+      <div class="container-fluid">
+        <div class="navbar-header me-30">
+          <a class="navbar-brand" href="/">Tallinna Lennujaam | Avaleht</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+          <p class="d-inline-flex gap-1">
+            <button *ngIf="!isLoggedIn" routerLink="/register" class="btn btn-dark">Registreeri</button>
+            <button *ngIf="!isLoggedIn" routerLink="/login" class="btn btn-warning">Logi sisse</button>
+            <button *ngIf="isLoggedIn" routerLink="/reservations" class="btn btn-dark">Minu broneeringud</button>
+            <button *ngIf="isLoggedIn" (click)="logout()" class="btn btn-danger">Logi välja</button>
+          </p>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+</header>
 <router-outlet></router-outlet>

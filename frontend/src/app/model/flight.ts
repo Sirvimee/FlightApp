@@ -5,8 +5,8 @@ export interface Flight {
   date: string;
   airline: string;
   destination: string;
-  departureTime: string; 
-  arrivalTime: string; 
+  departureTime: string;
+  arrivalTime: string;
   price: number;
   airplane: Airplane;
 }

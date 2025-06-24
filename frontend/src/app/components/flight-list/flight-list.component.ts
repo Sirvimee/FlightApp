@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { FlightService } from '../../services/flight.service';
-import { Flight } from '../../model/flight';
+import { Flight } from 'src/app/model/flight';
 
 @Component({
   selector: 'app-flight-list',
   templateUrl: './flight-list.component.html',
   styleUrls: ['./flight-list.component.css'],
 })
+
 export class FlightListComponent implements OnInit {
   flights: Flight[] = [];
   filteredFlights: Flight[] = [];
   selectedFlightId: number | null = 0;
   selectedFlight!: Flight;
-  selectedPassengerCount: number = 0;
+  selectedPassengerCount: number = 1;
+  selectedSeatClass: string = 'ECONOMY';
+  flightIsSelected: boolean = false;
 
   filters = {
     destination: '',
     date: '',
-    departureTime: '',
+    departureDate: '',
     price: ''
   };
 
@@ -27,7 +30,7 @@ export class FlightListComponent implements OnInit {
     this.flightService.getFlights().subscribe({
       next: (data) => {
         this.flights = data;
-        this.filteredFlights = this.flights;  
+        this.filteredFlights = this.flights;
       },
       error: (err) => {
         console.error('Viga lendude laadimisel:', err);
@@ -36,30 +39,31 @@ export class FlightListComponent implements OnInit {
   }
 
   selectFlight(flight: Flight) {
+    this.flightIsSelected = true;
     this.selectedFlight = flight;
     this.filteredFlights = this.filteredFlights.filter(f => f.id === flight.id);
     this.selectedPassengerCount = this.selectedPassengerCount;
+    this.selectedSeatClass = this.selectedSeatClass;
   }
 
   clearFlightSelection() {
-    this.selectedFlightId = null; 
-    this.selectedPassengerCount = 0;
-    this.clearFilters(); 
+    this.flightIsSelected = false;
+    this.selectedFlightId = null;
+    this.selectedPassengerCount = 1;
+    this.selectedSeatClass = 'ECONOMY';
+    this.clearFilters();
   }
 
   applyFilters() {
     this.filteredFlights = this.filteredFlights.filter(flight => {
       return (
-        (!this.filters.destination || 
+        (!this.filters.destination ||
           flight.destination.toLowerCase().includes(this.filters.destination.toLowerCase())) &&
-          
-        (!this.filters.date || 
-          flight.date === this.filters.date) &&
-          
-        (!this.filters.departureTime || 
-          flight.departureTime === this.filters.departureTime) && 
-          
-        (!this.filters.price || 
+
+        (!this.filters.departureDate ||
+          flight.date === this.filters.departureDate) &&
+
+        (!this.filters.price ||
           flight.price <= +this.filters.price)
       );
     });
@@ -69,7 +73,7 @@ export class FlightListComponent implements OnInit {
     this.filters = {
       destination: '',
       date: '',
-      departureTime: '',
+      departureDate: '',
       price: ''
     };
     this.filteredFlights = this.flights;

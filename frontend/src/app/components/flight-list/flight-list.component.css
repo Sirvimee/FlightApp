@@ -1,5 +1,5 @@
 .table-container {
-    padding-bottom: 50px; 
+    padding-bottom: 50px;
 }
 
 .table {
@@ -9,7 +9,7 @@
 }
 
 .table thead th {
-    background-color: #000000 !important; 
+    background-color: #000000 !important;
     color: #FFFFFF;
     font-size: 1.2em;
     font-weight: normal;

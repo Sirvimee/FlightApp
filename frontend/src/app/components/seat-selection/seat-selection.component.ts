@@ -4,6 +4,8 @@ import { ReservationService } from '../../services/reservation.service';
 import { Output, EventEmitter } from '@angular/core';
 import { Reservation } from 'src/app/model/reservation';
 import { Flight } from 'src/app/model/flight';
+import { AppComponent } from 'src/app/app.component';
+import { User } from 'src/app/model/user';
 
 @Component({
   selector: 'app-seat-selection',
@@ -13,6 +15,7 @@ import { Flight } from 'src/app/model/flight';
 export class SeatSelectionComponent implements OnInit {
   @Input() flight!: Flight;
   @Input() passengerCount!: number;
+  @Input() selectedSeatClass!: string; // 'ECONOMY', 'BUSINESS', 'FIRST_CLASS'
   @Output() back = new EventEmitter<void>();
   seats: any[] = [];
   firstClassSeats: any[] = [];
@@ -24,36 +27,54 @@ export class SeatSelectionComponent implements OnInit {
   availableBusinessClassSeats: any[] = [];
   availableEconomyClassSeats: any[] = [];
   availableSeats: any[] = [];
+  isLoggedIn = false;
+  isLoading = true;
+  user: User = JSON.parse(localStorage.getItem('user') || '{}');
 
   constructor(
     private seatService: SeatService,
     private reservationService: ReservationService,
     private cdr: ChangeDetectorRef,
-  ) {}
+    private appComponent: AppComponent,
+  ) {this.isLoggedIn = this.appComponent.isLoggedIn; }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.seatService.getSeatsForFlight(Number(this.flight.id)).subscribe(data => {
-      this.seats = data.map((s: any) => ({
-        ...s.seat,  
-        available: s.available
-      }));
-  
+      const seenSeatIds = new Set<number>();
+      this.seats = data
+        .map((s: any) => ({
+          ...s.seat,
+          available: s.available,
+          seat_id: s.seat.id ?? s.seat_id
+        }))
+        .filter(seat => {
+          if (seenSeatIds.has(seat.seat_id)) {
+            return false;
+          }
+          seenSeatIds.add(seat.seat_id);
+          return true;
+        })
+        .sort((a, b) => a.seat_id - b.seat_id);
+
       this.processSeatChart();
-      
+
       setTimeout(() => {
         this.selectInitialSeats();
         this.cdr.detectChanges();
+        this.isLoading = false;
       }, 100);
     }, error => {
       console.error("Viga istmete laadimisel:", error);
+      this.isLoading = false;
     });
   }
-  
+
   private processSeatChart(): void {
     this.firstClassSeats = this.seats.filter(seat => seat.seatClass === 'FIRST_CLASS');
     this.businessClassSeats = this.seats.filter(seat => seat.seatClass === 'BUSINESS');
     this.economyClassSeats = this.seats.filter(seat => seat.seatClass === 'ECONOMY');
-    
+
     this.availableSeats = this.seats.filter(seat => seat.available);
     this.availableFirstClassSeats = this.firstClassSeats.filter(seat => seat.available);
     this.availableBusinessClassSeats = this.businessClassSeats.filter(seat => seat.available);
@@ -61,8 +82,11 @@ export class SeatSelectionComponent implements OnInit {
   }
 
   selectInitialSeats(): void {
-    if (this.passengerCount <= 2) {
+    if (this.selectedSeatClass === 'FIRST_CLASS') {
       this.searchSeats(this.availableFirstClassSeats, 0);
+      this.searchSeats(this.availableBusinessClassSeats, 0);
+      this.searchSeats(this.availableEconomyClassSeats, 0);
+    } else if (this.selectedSeatClass === 'BUSINESS') {
       this.searchSeats(this.availableBusinessClassSeats, 0);
       this.searchSeats(this.availableEconomyClassSeats, 0);
     } else {
@@ -72,17 +96,17 @@ export class SeatSelectionComponent implements OnInit {
     if (this.selectedSeats.length < this.passengerCount) {
           this.selectedSeats = this.availableSeats.slice(0, this.passengerCount);
         }
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
   }
 
   getSeatClass(seat: any): string {
-    if (!seat) return ''; 
-  
+    if (!seat) return '';
+
     let classes = seat.available ? 'available-seat ' : 'unavailable-seat ';
 
     if (seat.extraLegroom) classes += 'extra-legroom ';
     if (seat.exitRow) classes += 'exit-row ';
-    if (this.selectedSeats.includes(seat.id)) classes += 'selected-seat '; 
+    if (this.selectedSeats.includes(seat.id)) classes += 'selected-seat ';
     return classes.trim();
   }
 
@@ -101,7 +125,7 @@ export class SeatSelectionComponent implements OnInit {
         i++;
       }
     }
-  }  
+  }
 
   selectSeat(seat: any): void {
     if (this.selectedSeats.includes(seat.id)) {
@@ -112,42 +136,34 @@ export class SeatSelectionComponent implements OnInit {
   }
 
   confirmSeat() {
-    if (!this.passengerName.trim()) {
-      alert('Palun sisestage oma nimi.');
-      return;
-    }
 
     const passengerCountNumber = Number(this.passengerCount);
-  
+
     if (this.selectedSeats.length !== passengerCountNumber) {
       alert(`Palun valige ${passengerCountNumber} istekohta`);
       return;
     }
 
     const reservation: Reservation = {
-      passengerName: this.passengerName,
+      user: this.user,
       flight: this.flight
     };
 
-    console.log(reservation);
-    console.log(this.selectedSeats);
-  
     this.reservationService.bookSeats(reservation, this.selectedSeats).subscribe({
       next: () => {
-        alert(`Istmed on broneeritud ${this.passengerName} nimele!`);
-        this.ngOnInit();
+        alert(`Istmed on broneeritud!`);
+        window.location.href = '/reservations';
       },
       error: err => {
-        console.error('Broneering ebaõnnestus:', err);
         alert('Broneerimisel tekkis viga, proovige uuesti.');
       }
-    
+
     });
   }
-   
+
   chunkArray(myArray: any[], chunk_size: number): any[][] {
     const results = [];
-    const arrayCopy = myArray.slice(); 
+    const arrayCopy = myArray.slice();
     while (arrayCopy.length) {
       results.push(arrayCopy.splice(0, chunk_size));
     }
@@ -155,8 +171,8 @@ export class SeatSelectionComponent implements OnInit {
   }
 
   goBack() {
-    this.selectedSeats = []; 
+    this.selectedSeats = [];
     this.back.emit(); // Send a signal to the flight-list so that the seat selection disappears
   }
-  
+
 }

@@ -1,8 +1,8 @@
 import { Flight } from './flight';
-import { ReservationSeats } from './reservationSeat';
+import { User } from './user';
 
 export interface Reservation {
   id?: number;
-  passengerName: string;
+  user: User;
   flight: Flight;
 }

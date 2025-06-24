@@ -1,62 +1,66 @@
 <div class="col-12 text-center seat-selection-container">
   <h2>Vali istekoht</h2>
 
-  <!-- FIRST CLASS -->
-  <div *ngIf="firstClassSeats.length > 0">
-    <h3>FIRST CLASS</h3>
-    <div *ngFor="let row of chunkArray(firstClassSeats, 4)">
-      <div class="seat-row">
-        <ng-container *ngFor="let seat of row; let i = index">
-          <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
-            {{ seat.seatNumber }}
-          </div>
-          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Bigger gap -->
-        </ng-container>
-      </div>
-    </div>
+  <div *ngIf="isLoading" class="my-4">
+    <span>Laen andmeid...</span>
   </div>
 
-  <!-- BUSINESS CLASS -->
-  <div *ngIf="businessClassSeats.length > 0">
-    <h3>BUSINESS</h3>
-    <div *ngFor="let row of chunkArray(businessClassSeats, 4)">
-      <div class="seat-row">
-        <ng-container *ngFor="let seat of row; let i = index">
-          <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
-            {{ seat.seatNumber }}
-          </div>
-          <div *ngIf="i === 1" class="seat-gap"></div> <!-- Bigger gap -->
-        </ng-container>
+  <ng-container *ngIf="!isLoading">
+    <!-- FIRST CLASS -->
+    <div *ngIf="firstClassSeats.length > 0">
+      <h3>FIRST CLASS</h3>
+      <div *ngFor="let row of chunkArray(firstClassSeats, 4)">
+        <div class="seat-row">
+          <ng-container *ngFor="let seat of row; let i = index">
+            <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
+              {{ seat.seatNumber }}
+            </div>
+            <div *ngIf="i === 1" class="seat-gap"></div> <!-- Bigger gap -->
+          </ng-container>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ECONOMY CLASS -->
-  <div *ngIf="economyClassSeats.length > 0">
-    <h3>ECONOMY</h3>
-    <div *ngFor="let row of chunkArray(economyClassSeats, 6)">
-      <div class="seat-row">
-        <ng-container *ngFor="let seat of row; let i = index">
-          <div class="seat-item" 
-            [ngClass]="getSeatClass(seat)" 
-            (click)="selectSeat(seat)" 
-            [attr.title]="getSeatClass(seat).includes('extra-legroom') ? 
-            'Suurem jalgade ruum' : getSeatClass(seat).includes('exit-row') ? 
-            'Väljapääs' : ''"
-            >
-            {{ seat.seatNumber }}
-          </div>
-          <div *ngIf="i === 2" class="seat-gap"></div> <!-- Bigger gap -->
-        </ng-container>
+    <!-- BUSINESS CLASS -->
+    <div *ngIf="businessClassSeats.length > 0">
+      <h3>BUSINESS</h3>
+      <div *ngFor="let row of chunkArray(businessClassSeats, 4)">
+        <div class="seat-row">
+          <ng-container *ngFor="let seat of row; let i = index">
+            <div class="seat-item" [ngClass]="getSeatClass(seat)" (click)="selectSeat(seat)">
+              {{ seat.seatNumber }}
+            </div>
+            <div *ngIf="i === 1" class="seat-gap"></div> <!-- Bigger gap -->
+          </ng-container>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-12">
-    <label for="passengerName" class="bold-label">Reisija nimi:</label>
-    <input id="passengerName" type="text" [(ngModel)]="passengerName" class="form-control mb-2 passenger-name-input" placeholder="Sisesta oma nimi">
-  
-    <button class="btn btn-primary" (click)="confirmSeat()">Kinnita</button>&nbsp;
-    <button class="btn btn-warning" (click)="goBack()">Tagasi</button>
-  </div>
-<div>&nbsp;</div>
+    <!-- ECONOMY CLASS -->
+    <div *ngIf="economyClassSeats.length > 0">
+      <h3>ECONOMY</h3>
+      <div *ngFor="let row of chunkArray(economyClassSeats, 6)">
+        <div class="seat-row">
+          <ng-container *ngFor="let seat of row; let i = index">
+            <div class="seat-item"
+              [ngClass]="getSeatClass(seat)"
+              (click)="selectSeat(seat)"
+              [attr.title]="getSeatClass(seat).includes('extra-legroom') ? 'Suurem jalgade ruum' :
+              getSeatClass(seat).includes('exit-row') ? 'Varuväljapääs' : ''"
+              >
+              {{ seat.seatNumber }}
+            </div>
+            <div *ngIf="i === 2" class="seat-gap"></div> <!-- Bigger gap -->
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <h3 *ngIf="!isLoggedIn" class="bold-label">Broneerimiseks logi sisse</h3>
+      <button *ngIf="isLoggedIn" class="btn btn-primary" (click)="confirmSeat()">Kinnita</button>&nbsp;
+      <button class="btn btn-warning" (click)="goBack()">Tagasi</button>
+    </div>
+    <div>&nbsp;</div>
+  </ng-container>
+</div>

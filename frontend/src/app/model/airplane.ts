@@ -4,5 +4,5 @@ import { Seat } from "./seat";
 export interface Airplane {
     id: number;
     model: string;
-    capacity: number;
+    capasity: number;
 }

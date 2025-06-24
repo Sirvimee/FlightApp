@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
@@ -9,13 +9,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlightListComponent } from './components/flight-list/flight-list.component';
 import { SeatSelectionComponent } from './components/seat-selection/seat-selection.component';
 import { FlightService } from './services/flight.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthInterceptor } from './auth/services/auth.interceptor';
+import { RegisterComponent } from './auth/register/register.component';
+import { LoginComponent } from './auth/login/login.component';
+import { ReservationsListComponent } from './reservations-list/reservations-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FlightListComponent,
-    SeatSelectionComponent
+    SeatSelectionComponent,
+    RegisterComponent,
+    LoginComponent,
+    ReservationsListComponent
   ],
   imports: [
     BrowserModule,
@@ -23,9 +30,13 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule
   ],
-  providers: [FlightService],
+providers: [
+  FlightService,
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
