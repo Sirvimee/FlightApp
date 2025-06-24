@@ -2,6 +2,9 @@
 
 ## Kasutusjuhend
 
+### Backendi API dokumentatsioon
+https://backend-production-2034.up.railway.app/swagger-ui/index.html#/
+
 ### Backendi käivitamine (kaust `backend`)
 1. Mine kausta `backend`
 2. Ava Idea IntelliJ ja impordi sisse Maveni projekt
