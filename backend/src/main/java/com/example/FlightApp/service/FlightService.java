@@ -16,10 +16,11 @@ public class FlightService {
     private final FlightRepository flightRepository;
 
     public List<Flight> getAllFlights() {
-        return flightRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return flightRepository.findAllByOrderByDateAscDepartureTimeAsc();
     }
 
     public Flight getFlightById(Long id) {
-        return flightRepository.findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
+        return flightRepository
+                .findById(id).orElseThrow(() -> new RuntimeException("Flight not found"));
     }
 }
