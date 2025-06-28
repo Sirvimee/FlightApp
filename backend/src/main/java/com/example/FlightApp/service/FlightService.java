@@ -3,6 +3,7 @@ package com.example.FlightApp.service;
 import com.example.FlightApp.model.Flight;
 import com.example.FlightApp.repository.FlightRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -15,7 +16,7 @@ public class FlightService {
     private final FlightRepository flightRepository;
 
     public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+        return flightRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     public Flight getFlightById(Long id) {
